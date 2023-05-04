@@ -76,10 +76,11 @@ function initIndexPage() {
 
 
 function initVotePage() {
-  const url = new URL(window.location.href);
-  const isPathIncludesStore = url.pathname.includes('store');
+  const url = location.href;
+  const isPathIncludesStore = url.includes('store');
   if (isPathIncludesStore) {
-    storeParam = url.urlParams.get('store');
+    let urlParams = url.searchParams;
+    storeParam = urlParams.get('store');
     castVote(storeParam);
   } else {
     console.log('パスが正しくありません');
