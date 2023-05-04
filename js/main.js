@@ -90,8 +90,8 @@ function initVotePage() {
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してindex.htmlとvote.htmlで実行する処理を分ける
 window.addEventListener('DOMContentLoaded', () => {
   const url = new URL(window.location.href);
-  const page = url.searchParams.get('vote');
-  if (page === 'vote') {
+  const isPathIncludesVote = url.pathname.includes('vote');
+  if (isPathIncludesVote) {
     initVotePage();
   } else {
     initIndexPage();
