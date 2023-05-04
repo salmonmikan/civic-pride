@@ -1,12 +1,23 @@
 // CSVファイルを読み込む関数
 async function loadCSVData(url) {
-  const response = await fetch(url);
-  const data = await response.text();
-  return parseCSVData(data);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.text();
+    const parsedData = parseCSVData(data);
+    return parsedData;
+  } catch (error) {
+    console.error('Failed to fetch CSV data:', error);
+    return { labels: [], data: [] };
+  }
 }
 
 // CSVデータをパースする関数
 function parseCSVData(data) {
+  const lines = data.trim().split('\n');
+  const header = lines.shift().split(',');
   const result = {
     labels: [],
     data: [],
@@ -15,7 +26,7 @@ function parseCSVData(data) {
   lines.forEach((line) => {
     const [label, value] = line.split(',');
     result.labels.push(label);
-    result.data.push(value);
+    result.data.push(parseInt(value, 10));
   });
 
   return result;
@@ -23,7 +34,7 @@ function parseCSVData(data) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   // CSVファイルからデータを読み込む
-  const csvData = await loadCSVData('sample_data.csv');
+  const csvData = await loadCSVData('data/sample_data.csv');
 
   const data = {
     labels: csvData.labels,
@@ -61,5 +72,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     },
   });
 });
-
-
