@@ -77,7 +77,8 @@ function initIndexPage() {
 
 function initVotePage() {
   const url = new URL(window.location.href);
-  const isPathIncludesStore = url.includes('store');
+  const urlString = url.toString(); // URLの文字列表現を取得
+  const isPathIncludesStore = urlString.includes('store');
   if (isPathIncludesStore) {
     let urlParams = url.searchParams;
     storeParam = urlParams.get('store');
@@ -87,6 +88,7 @@ function initVotePage() {
     console.log('パスが正しくありません');
   }
 }
+
 
 
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してindex.htmlとvote.htmlで実行する処理を分ける
