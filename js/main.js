@@ -37,10 +37,12 @@ function drawChart(voteData) {
 }
 
 // デフォルトの投票データ
-const defaultVoteData = {
-  labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
-  data: [0, 0, 0, 0, 0],
-};
+function defaultVoteData() {
+  const defaultVoteData = {
+    labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
+    data: [0, 0, 0, 0, 0],
+  };
+}
 
 // 投票データをlocalStorageから取得する関数
 function getVoteData() {
@@ -67,31 +69,36 @@ function castVote(storeParam) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  const scriptTag = document.querySelector('script[src="main.js"]');
-  const page = scriptTag.dataset.page;
-
-  switch (page) {
-    case 'index':
-      initIndexPage();
-      break;
-    case 'vote':
-      initVotePage();
-      break;
-    default:
-      console.error('Unknown page type:', page);
-  }
-});
-
 function initIndexPage() {
   // index.htmlで実行する処理を記述
-  const voteData = getVoteData();
-  drawChart(voteData);
+  // 投票データを取得してグラフを描画するが、もし投票データがなければデフォルトのデータを使う
+  if (voteData) {
+    drawChart(voteData);
+  } else {
+    drawChart(defaultVoteData);
+  }
 }
 
 function initVotePage() {
   // vote.htmlで実行する処理を記述
-  const voteData = getVoteData();
+  // URLパラメーターから店舗名を取得して投票する。もし投票データがなければデフォルトのデータを使う。
+  let url = new URL(window.location.href);
+  // const urlParams = new URLSearchParams(window.location.search);
+  const storeParam = url.get('store');
+  console.log(storeParam);
+  castVote(storeParam);
 
 }
+
+
+// ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、index.htmlとvote.htmlで実行する処理を分ける
+window.addEventListener('DOMContentLoaded', () => {
+  const url = new URL(window.location.href);
+  if (url.pathname === '/civic-pride/') {
+    initIndexPage();
+  } else if (url.pathname === '/civic-pride/vote/') {
+    initVotePage();
+  }
+});
+
 
