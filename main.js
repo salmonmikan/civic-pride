@@ -1,46 +1,8 @@
-// CSVファイルを読み込む関数
-async function loadCSVData(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.text();
-    const parsedData = parseCSVData(data);
-    return parsedData;
-  } catch (error) {
-    console.error('Failed to fetch CSV data:', error);
-    return { labels: [], data: [] };
-  }
-}
-
-// CSVデータをパースする関数
-function parseCSVData(data) {
-  const lines = data.trim().split('\n');
-  const header = lines.shift().split(',');
-  const result = {
-    labels: [],
-    data: [],
-  };
-
-  lines.forEach((line) => {
-    const [label, value] = line.split(',');
-    result.labels.push(label);
-    result.data.push(parseInt(value, 10));
-  });
-
-  return result;
-}
-
-
-document.addEventListener('DOMContentLoaded', async () => {
-  // CSVファイルからデータを読み込む
-  const csvData = await loadCSVData('sample_data.csv');
-
+function drawChart(voteData) {
   const data = {
-    labels: csvData.labels,
+    labels: voteData.labels,
     datasets: [{
-      data: csvData.data,
+      data: voteData.data,
       backgroundColor: [
         'rgba(255, 99, 132, 0.6)',
         'rgba(54, 162, 235, 0.6)',
@@ -59,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }],
   };
 
-  // グラフを描画する
   const ctx = document.getElementById('resultChart').getContext('2d');
   const chart = new Chart(ctx, {
     type: 'bar',
@@ -72,4 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       },
     },
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const voteData = getVoteData();
+  drawChart(voteData);
 });
