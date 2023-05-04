@@ -67,13 +67,6 @@ function castVote(storeParam) {
 }
 
 
-// URLから"store"パラメータを取得する関数
-function getStoreParam() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('store');
-}
-
-
 function initIndexPage() {
   // index.htmlで実行する処理を記述
   // 投票データを取得してグラフを描画する。もしvoteDataの値が存在しなければデフォルトのデータを使う。
@@ -83,25 +76,24 @@ function initIndexPage() {
 
 
 function initVotePage() {
-  // vote.htmlで実行する処理を記述
-  // URLパラメーターの判定を行うためにgetStoreParamを実行する。StoreParamを利用してcastVoteで投票し、投票データを更新する。
-  const storeParam = getStoreParam();
-  if (storeParam) {
+  const url = new URL(window.location.href);
+  const isPathIncludesStore = url.pathname.includes('store');
+  if (isPathIncludesStore) {
+    storeParam = url.urlParams.get('store');
     castVote(storeParam);
   } else {
-    console.log('パラメータが指定されていません');
+    console.log('パスが正しくありません');
   }
 }
 
 
-// ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、index.htmlとvote.htmlで実行する処理を分ける
+// ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してindex.htmlとvote.htmlで実行する処理を分ける
 window.addEventListener('DOMContentLoaded', () => {
   const url = new URL(window.location.href);
-  if (url.pathname === '/civic-pride/') {
-    initIndexPage();
-  } else if (url.pathname === '/civic-pride/vote/') {
+  const page = url.searchParams.get('vote');
+  if (page === 'vote') {
     initVotePage();
+  } else {
+    initIndexPage();
   }
 });
-
-
