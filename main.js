@@ -32,6 +32,7 @@ function parseCSVData(data) {
   return result;
 }
 
+
 document.addEventListener('DOMContentLoaded', async () => {
   // CSVファイルからデータを読み込む
   const csvData = await loadCSVData('data/sample_data.csv');
