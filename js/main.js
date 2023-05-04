@@ -44,28 +44,35 @@ function defaultVoteData() {
   };
 }
 
-// 投票データをlocalStorageから取得する関数
+// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータ(defaultVoteData)を使う。
 function getVoteData() {
-  const storedData = localStorage.getItem('voteData');
-  return storedData ? JSON.parse(storedData) : defaultVoteData;
+  const voteData = localStorage.getItem('voteData');
+  if (voteData) {
+    return 
+  } else {
+    return defaultVoteData;
+  }
 }
+
 
 // 投票データをlocalStorageに保存する関数
 function saveVoteData(voteData) {
   localStorage.setItem('voteData', JSON.stringify(voteData));
 }
 
-// URLパラメーターから店舗名を取得、投票する関数
+// URLパラメーターを使って投票する関数
 function castVote(storeParam) {
+  const voteData = getVoteData();
   const storeIndex = voteData.labels.indexOf(storeParam);
+  voteData.data[storeIndex] += 1;
+  saveVoteData(voteData);
+}
 
-  if (storeIndex !== -1) {
-    voteData.data[storeIndex]++;
-    saveVoteData(voteData);
-    console.log(`投票が完了しました: ${storeParam}`);
-  } else {
-    console.log('無効な店舗パラメーター');
-  }
+
+// URLから"store"パラメータを取得する関数
+function getStoreParam() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('store');
 }
 
 
@@ -81,13 +88,13 @@ function initIndexPage() {
 
 function initVotePage() {
   // vote.htmlで実行する処理を記述
-  // URLパラメーターから店舗名を取得して投票する。もし投票データがなければデフォルトのデータを使う。
-  let url = new URL(window.location.href);
-  // const urlParams = new URLSearchParams(window.location.search);
-  const storeParam = url.get('store');
-  console.log(storeParam);
-  castVote(storeParam);
-
+  // URLパラメーターの判定を行うためにgetStoreParamを実行する。StoreParamを利用してcastVoteで投票し、投票データを更新する。
+  const storeParam = getStoreParam();
+  if (storeParam) {
+    castVote(storeParam);
+  } else {
+    console.log('パラメータが指定されていません');
+  }
 }
 
 
