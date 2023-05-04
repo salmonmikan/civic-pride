@@ -26,7 +26,7 @@ function parseCSVData(data) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   // CSVファイルからデータを読み込む
-  const csvData = await loadCSVData('data/sample_data.csv');
+  const csvData = await loadCSVData('sample_data.csv');
 
   const data = {
     labels: csvData.labels,
