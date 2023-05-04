@@ -37,12 +37,10 @@ function drawChart(voteData) {
 }
 
 // デフォルトの投票データ
-function defaultVoteData() {
-  const defaultVoteData = {
+const defaultVoteData = {
     labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
     data: [0, 0, 0, 0, 0],
   };
-}
 
 // 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータ(defaultVoteData)を使う。
 function getVoteData() {
@@ -78,13 +76,11 @@ function getStoreParam() {
 
 function initIndexPage() {
   // index.htmlで実行する処理を記述
-  // 投票データを取得してグラフを描画するが、もし投票データがなければデフォルトのデータを使う
-  if (voteData) {
-    drawChart(voteData);
-  } else {
-    drawChart(defaultVoteData);
-  }
+  // 投票データを取得してグラフを描画する。もしvoteDataの値が存在しなければデフォルトのデータを使う。
+  const voteData = getVoteData();
+  drawChart(voteData);
 }
+
 
 function initVotePage() {
   // vote.htmlで実行する処理を記述
