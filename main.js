@@ -1,15 +1,37 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // サンプルデータ。実際にはデータベースやAPIから取得する。
+// CSVファイルを読み込む関数
+async function loadCSVData(url) {
+  const response = await fetch(url);
+  const data = await response.text();
+  const parsedData = parseCSVData(data);
+  return parsedData;
+}
+
+// CSVデータをパースする関数
+function parseCSVData(data) {
+  const lines = data.trim().split('\n');
+  const header = lines.shift().split(',');
+  const result = {
+    labels: [],
+    data: [],
+  };
+
+  lines.forEach((line) => {
+    const [label, value] = line.split(',');
+    result.labels.push(label);
+    result.data.push(parseInt(value, 10));
+  });
+
+  return result;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // CSVファイルからデータを読み込む
+  const csvData = await loadCSVData('data/sample_data.csv');
+
   const data = {
-    labels: [
-      '店舗A',
-      '店舗B',
-      '店舗C',
-      '店舗D',
-      '店舗E',
-    ],
+    labels: csvData.labels,
     datasets: [{
-      data: [12, 19, 3, 5, 2],
+      data: csvData.data,
       backgroundColor: [
         'rgba(255, 99, 132, 0.6)',
         'rgba(54, 162, 235, 0.6)',
@@ -42,4 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   });
 });
+
 
