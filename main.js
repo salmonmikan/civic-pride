@@ -2,14 +2,11 @@
 async function loadCSVData(url) {
   const response = await fetch(url);
   const data = await response.text();
-  const parsedData = parseCSVData(data);
-  return parsedData;
+  return parseCSVData(data);
 }
 
 // CSVデータをパースする関数
 function parseCSVData(data) {
-  const lines = data.trim().split('\n');
-  const header = lines.shift().split(',');
   const result = {
     labels: [],
     data: [],
@@ -18,7 +15,7 @@ function parseCSVData(data) {
   lines.forEach((line) => {
     const [label, value] = line.split(',');
     result.labels.push(label);
-    result.data.push(parseInt(value, 10));
+    result.data.push(value);
   });
 
   return result;
