@@ -87,7 +87,7 @@ function initVotePage() {
     let storeParam = urlParams.get('store');
     castVote(storeParam);
     const voteMessage = document.getElementById('vote-message');
-    voteMessage.textContent = '${storeParam}に投票しました！';
+    voteMessage.textContent = ${storeParam}'に投票しました！';
   } else {
     console.log('パスが正しくありません');
   }
@@ -112,5 +112,6 @@ function resetVoteData() {
   getVoteData();
 }
 
-// データをリセットするボタンを押したときにresetVoteData関数を実行する
-document.getElementById('ControlButton').addEventListener('click', resetVoteData);
+// データをリセットするボタン(ResetButton)を押したときにresetVoteData関数を実行する
+const resetButton = document.getElementById('reset-button');
+resetButton.addEventListener('click', resetVoteData);
