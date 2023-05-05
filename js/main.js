@@ -42,14 +42,16 @@ const defaultVoteData = {
     data: [0, 0, 0, 0, 0],
   };
 
-// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータ(defaultVoteData)を使う。
+// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータ(defaultVoteData)を使い、そのデータをlocalStorageに保存する。
 function getVoteData() {
-  const voteData = localStorage.getItem('voteData');
+  let voteData = localStorage.getItem('voteData');
   if (voteData) {
-    return 
+    voteData = JSON.parse(voteData);
   } else {
-    return defaultVoteData;
+    voteData = defaultVoteData;
+    saveVoteData(voteData);
   }
+  return voteData;
 }
 
 
@@ -58,14 +60,13 @@ function saveVoteData(voteData) {
   localStorage.setItem('voteData', JSON.stringify(voteData));
 }
 
-// URLパラメーターを使って投票する関数
+// 投票を行う関数。投票データを取得し、storeParamに対応するデータを+1する。その後、投票データをlocalStorageに保存する。
 function castVote(storeParam) {
   const voteData = getVoteData();
   const storeIndex = voteData.labels.indexOf(storeParam);
   voteData.data[storeIndex] += 1;
   saveVoteData(voteData);
 }
-
 
 function initIndexPage() {
   // index.htmlで実行する処理を記述
@@ -76,13 +77,16 @@ function initIndexPage() {
 
 
 function initVotePage() {
+  // vote.htmlで実行する処理を記述
+  // URLからパラメータを取得する
   const url = new URL(window.location.href);
   const urlString = url.toString(); // URLの文字列表現を取得
   const isPathIncludesStore = urlString.includes('store');
   if (isPathIncludesStore) {
     let urlParams = url.searchParams;
-    storeParam = urlParams.get('store');
+    let storeParam = urlParams.get('store');
     castVote(storeParam);
+    const voteMessage = document.getElementById('vote-message');
     voteMessage.textContent = '投票しました！';
   } else {
     console.log('パスが正しくありません');
@@ -93,7 +97,6 @@ function initVotePage() {
 
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してindex.htmlとvote.htmlで実行する処理を分ける
 window.addEventListener('DOMContentLoaded', () => {
-  const voteMessage = document.getElementById('vote-message');
   const isPathIncludesVote = window.location.href.includes('vote');
   if (isPathIncludesVote) {
     initVotePage();
