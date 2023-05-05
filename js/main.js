@@ -87,7 +87,7 @@ function initVotePage() {
     let storeParam = urlParams.get('store');
     castVote(storeParam);
     const voteMessage = document.getElementById('vote-message');
-    voteMessage.textContent = '投票しました！';
+    voteMessage.textContent = '${storeParam}に投票しました！';
   } else {
     console.log('パスが正しくありません');
   }
@@ -104,3 +104,13 @@ window.addEventListener('DOMContentLoaded', () => {
     initIndexPage();
   }
 });
+
+// データをリセットする関数
+function resetVoteData() {
+  localStorage.removeItem('voteData');
+  location.reload();
+  getVoteData();
+}
+
+// データをリセットするボタンを押したときにresetVoteData関数を実行する
+document.getElementById('ControlButton').addEventListener('click', resetVoteData);
