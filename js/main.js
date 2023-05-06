@@ -127,3 +127,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const ResetVote = document.getElementById('ResetVote');
   ResetVote.addEventListener('click', resetVoteData);
 });
+
+// ページがユーザーによってリロードされたときに、localStorageから投票データを取得し、グラフを再描画する。
+window.addEventListener('pageshow', () => {
+  const voteData = getVoteData();
+  drawChart(voteData);
+});
