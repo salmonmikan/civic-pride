@@ -72,6 +72,7 @@ function initIndexPage() {
   drawChart(getVoteData());
 }
 
+
 function initVotePage() {
   // vote.htmlで実行する処理を記述
   // URLからパラメータを取得する
@@ -80,6 +81,7 @@ function initVotePage() {
   const isPathIncludesStore = urlString.includes('store');
   const voteMessage = document.getElementById('vote-message');
   const ActionVote = document.getElementById('ActionVote');
+  let storeParam;
   if (isPathIncludesStore) {
     const storeParam = url.searchParams.get('store');
     voteMessage.textContent = `${storeParam}に投票しますか？`;
