@@ -36,13 +36,13 @@ function drawChart(voteData) {
   });
 }
 
-// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータ(defaultVoteData)を使い、そのデータをlocalStorageに保存する。
+// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータを使い、そのデータをlocalStorageに保存する。
 function getVoteData() {
   let voteData = localStorage.getItem('voteData');
   if (voteData) {
     voteData = JSON.parse(voteData);
   } else {
-    voteData = defaultVoteData = {
+    voteData = {
       labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
       data: [0, 0, 0, 0, 0],
     };
@@ -79,14 +79,19 @@ function initVotePage() {
   const urlString = url.toString(); // URLの文字列表現を取得
   const isPathIncludesStore = urlString.includes('store');
   const voteMessage = document.getElementById('vote-message');
+  const ActionVote = document.getElementById('ActionVote');
   if (isPathIncludesStore) {
-    let urlParams = url.searchParams;
-    let storeParam = urlParams.get('store');
-    castVote(storeParam);
-    voteMessage.textContent = "投票しました！";
-  } else {
-    voteMessage.textContent = "投票できませんでした。";
+    const storeParam = url.searchParams.get('store');
+    voteMessage.textContent = `${storeParam}に投票しますか？`;
+    ActionVote.style.display = 'block';
   }
+
+  // 投票ボタンを押したときに投票を行う関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
+  ActionVote.addEventListener('click', () => {
+    castVote(storeParam);
+    ActionVote.style.display = 'none';
+    voteMessage.textContent = '投票しました！';
+  });
 }
 
 // データをリセットする関数
@@ -101,8 +106,11 @@ window.addEventListener('DOMContentLoaded', () => {
   const url = new URL(window.location.href);
   const urlString = url.toString();
   const isPathIncludesIndex = urlString.includes('index');
+  const isPathIncludesVote = urlString.includes('vote');
   if (isPathIncludesIndex) {
     initIndexPage();
+  } else if (isPathIncludesVote) {
+    initVotePage();
   }
 
   // データをリセットするボタン(ResetVote)を押したときにresetVoteData関数を実行する
