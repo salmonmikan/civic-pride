@@ -48,6 +48,7 @@ function getVoteData() {
     };
     saveVoteData(voteData);
   }
+  saveVoteData(voteData);
   return voteData;
 }
 
