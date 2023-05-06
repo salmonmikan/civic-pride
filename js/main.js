@@ -87,9 +87,9 @@ function initVotePage() {
     let urlParams = url.searchParams;
     let storeParam = urlParams.get('store');
     castVote(storeParam);
-    voteMessage.textContent = "${storeParam}に投票しました！";
+    voteMessage.textContent = "投票しました！";
   } else {
-    voteMessage.textContent = "投票先のパラーメータが不明です。パラメーターを指定してアクセスしてください。";
+    voteMessage.textContent = "投票できませんでした。";
   }
 }
 
@@ -100,15 +100,25 @@ function resetVoteData() {
   location.reload();
 }
 
-// ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してindex.htmlとvote.htmlで実行する処理を分ける
+// ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してもしindexを含んでいればinitIndexPage関数を実行する。そうでなければ次の処理を実行する。
 window.addEventListener('DOMContentLoaded', () => {
-  const isPathIncludesVote = window.location.href.includes('vote');
-  if (isPathIncludesVote) {
-    initVotePage();
-  } else {
+  const url = new URL(window.location.href);
+  const urlString = url.toString();
+  const isPathIncludesIndex = urlString.includes('index');
+  if (isPathIncludesIndex) {
     initIndexPage();
+  } else {
+    return;
   }
+
   // データをリセットするボタン(ResetVote)を押したときにresetVoteData関数を実行する
-  const resetButton = document.getElementById('ResetVote');
-  resetButton.addEventListener('click', resetVoteData);
+  const ResetVote = document.getElementById('ResetVote');
+  ResetVote.addEventListener('click', resetVoteData);
+
+  // 投票ボタンを押したときに投票を行う関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
+  const ActionVote = document.getElementById('ActionVote');
+  ActionVote.addEventListener('click', () => {
+    initVotePage();
+    ActionVote.style.display = 'none';
+    });
 });
