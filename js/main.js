@@ -1,5 +1,5 @@
 // グラフを描画する関数
-function drawChart() {
+function drawChart(voteData) {
   const data = {
     labels: voteData.labels,
     datasets: [{
