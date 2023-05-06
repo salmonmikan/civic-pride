@@ -109,10 +109,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const ResetVote = document.getElementById('ResetVote');
   ResetVote.addEventListener('click', resetVoteData);
 
-  // 投票ボタンを押したときに投票を行う関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
+  // 投票ボタン(id=ActionVote)を押したときに投票を行う(initVotePage)関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
   const ActionVote = document.getElementById('ActionVote');
+  ActionVote.addEventListener('click', initVotePage);
   ActionVote.addEventListener('click', () => {
-    initVotePage();
     ActionVote.style.display = 'none';
-    });
+  });
 });
