@@ -69,7 +69,8 @@ function castVote(storeParam) {
 function initIndexPage() {
   // index.htmlで実行する処理を記述
   // 投票データを取得してグラフを描画する。もしvoteDataの値が存在しなければデフォルトのデータを使う。
-  drawChart(getVoteData());
+  const voteData = getVoteData();
+  drawChart(voteData);
 }
 
 
@@ -89,7 +90,6 @@ function initVotePage() {
     voteMessage.textContent = '投票する店舗が指定されていません。';
     ActionVote.style.display = 'none';
   }
-
   // 投票ボタンを押したときに投票を行う関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
   ActionVote.addEventListener('click', () => {
     castVote(storeParam);
