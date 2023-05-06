@@ -1,5 +1,5 @@
 // グラフを描画する関数
-function drawChart(voteData) {
+function drawChart() {
   const data = {
     labels: voteData.labels,
     datasets: [{
@@ -83,7 +83,7 @@ function initVotePage() {
   const ActionVote = document.getElementById('ActionVote');
   let storeParam;
   if (isPathIncludesStore) {
-    const storeParam = url.searchParams.get('store');
+    storeParam = url.searchParams.get('store');
     voteMessage.textContent = `${storeParam}に投票しますか？`;
   } else {
     voteMessage.textContent = '投票する店舗が指定されていません。';
