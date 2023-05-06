@@ -28,16 +28,12 @@ section {
 }
 
 button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
   padding: 0.5em 1em;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 1em;
   margin: 0.5em;
-  cursor: pointer;
 }
 
 footer {
