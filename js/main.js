@@ -83,7 +83,9 @@ function initVotePage() {
   if (isPathIncludesStore) {
     const storeParam = url.searchParams.get('store');
     voteMessage.textContent = `${storeParam}に投票しますか？`;
-    ActionVote.style.display = 'block';
+  } else {
+    voteMessage.textContent = '投票する店舗が指定されていません。';
+    ActionVote.style.display = 'none';
   }
 
   // 投票ボタンを押したときに投票を行う関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
@@ -116,11 +118,4 @@ window.addEventListener('DOMContentLoaded', () => {
   // データをリセットするボタン(ResetVote)を押したときにresetVoteData関数を実行する
   const ResetVote = document.getElementById('ResetVote');
   ResetVote.addEventListener('click', resetVoteData);
-
-  // 投票ボタン(id=ActionVote)を押したときに投票を行う(initVotePage)関数を実行する。ボタンを押すと投票しました！というメッセージに変わり、投票ボタンが消える。
-  const ActionVote = document.getElementById('ActionVote');
-  ActionVote.addEventListener('click', initVotePage);
-  ActionVote.addEventListener('click', () => {
-    ActionVote.style.display = 'none';
-  });
 });
