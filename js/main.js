@@ -41,6 +41,7 @@ function getVoteData() {
   let voteData = localStorage.getItem('voteData');
   if (voteData) {
     voteData = JSON.parse(voteData);
+    saveVoteData(voteData);
   } else {
     voteData = {
       labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
