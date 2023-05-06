@@ -82,14 +82,14 @@ function initVotePage() {
   const url = new URL(window.location.href);
   const urlString = url.toString(); // URLの文字列表現を取得
   const isPathIncludesStore = urlString.includes('store');
+  const voteMessage = document.getElementById('vote-message');
   if (isPathIncludesStore) {
     let urlParams = url.searchParams;
     let storeParam = urlParams.get('store');
     castVote(storeParam);
-    const voteMessage = document.getElementById('vote-message');
-    voteMessage.textContent = ${storeParam}'に投票しました！';
+    voteMessage.textContent = "${storeParam}に投票しました！";
   } else {
-    console.log('パスが正しくありません');
+    voteMessage.textContent = "投票先のパラーメータが不明です。パラメーターを指定してアクセスしてください。";
   }
 }
 
