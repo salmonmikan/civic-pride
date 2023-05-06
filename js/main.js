@@ -28,13 +28,18 @@ function drawChart(voteData) {
     data: data,
     options: {
       scales: {
-        y: {
-          beginAtZero: true,
-        },
+        // 縦軸の設定で、最小値を0にし、刻み幅を1にする。
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1,
+          },
+        }],
       },
     },
   });
 }
+
 
 // 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータを使い、そのデータをlocalStorageに保存する。
 function getVoteData() {
