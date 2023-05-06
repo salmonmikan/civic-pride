@@ -36,19 +36,16 @@ function drawChart(voteData) {
   });
 }
 
-// デフォルトの投票データ
-const defaultVoteData = {
-    labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
-    data: [0, 0, 0, 0, 0],
-  };
-
 // 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータ(defaultVoteData)を使い、そのデータをlocalStorageに保存する。
 function getVoteData() {
   let voteData = localStorage.getItem('voteData');
   if (voteData) {
     voteData = JSON.parse(voteData);
   } else {
-    voteData = defaultVoteData;
+    voteData = defaultVoteData = {
+      labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
+      data: [0, 0, 0, 0, 0],
+    };
     saveVoteData(voteData);
   }
   return voteData;
@@ -68,13 +65,12 @@ function castVote(storeParam) {
   saveVoteData(voteData);
 }
 
+// ページ別の処理
 function initIndexPage() {
   // index.htmlで実行する処理を記述
   // 投票データを取得してグラフを描画する。もしvoteDataの値が存在しなければデフォルトのデータを使う。
-  const voteData = getVoteData();
-  drawChart(voteData);
+  drawChart(getVoteData());
 }
-
 
 function initVotePage() {
   // vote.htmlで実行する処理を記述
@@ -102,14 +98,11 @@ function resetVoteData() {
 
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してもしindexを含んでいればinitIndexPage関数を実行する。そうでなければ次の処理を実行する。
 window.addEventListener('DOMContentLoaded', () => {
-  drawChart(getVoteData());
   const url = new URL(window.location.href);
   const urlString = url.toString();
   const isPathIncludesIndex = urlString.includes('index');
   if (isPathIncludesIndex) {
     initIndexPage();
-  } else {
-    return;
   }
 
   // データをリセットするボタン(ResetVote)を押したときにresetVoteData関数を実行する
