@@ -28,7 +28,6 @@ function drawChart(voteData) {
     data: data,
     options: {
       scales: {
-        // 縦軸の設定で、最小値を0にし、刻み幅を1にする。
         yAxes: [{
           ticks: {
             beginAtZero: true,
@@ -40,13 +39,11 @@ function drawChart(voteData) {
   });
 }
 
-
-// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータを使い、そのデータをlocalStorageに保存する。
+// 投票データをCookieから取得する関数
 function getVoteData() {
-  let voteData = localStorage.getItem('voteData');
+  let voteData = getCookie('voteData');
   if (voteData) {
     voteData = JSON.parse(voteData);
-    saveVoteData(voteData);
   } else {
     voteData = {
       labels: ['店舗A', '店舗B', '店舗C', '店舗D', '店舗E'],
@@ -57,13 +54,27 @@ function getVoteData() {
   return voteData;
 }
 
-
-// 投票データをlocalStorageに保存する関数
+// 投票データをCookieに保存する関数
 function saveVoteData(voteData) {
-  localStorage.setItem('voteData', JSON.stringify(voteData));
+  setCookie('voteData', JSON.stringify(voteData), 365);
 }
 
-// 投票を行う関数。投票データを取得し、storeParamに対応するデータを+1する。その後、投票データをlocalStorageに保存する。
+// Cookieを取得する関数
+function getCookie(name) {
+  const value = "; " + document.cookie;
+  const parts = value.split("; " + name + "=");
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+// Cookieを設定する関数
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = "; expires=" + date.toUTCString();
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+// 投票を行う関数
 function castVote(storeParam) {
   const voteData = getVoteData();
   const storeIndex = voteData.labels.indexOf(storeParam);
@@ -74,11 +85,9 @@ function castVote(storeParam) {
 // ページ別の処理
 function initIndexPage() {
   // index.htmlで実行する処理を記述
-  // 投票データを取得してグラフを描画する。もしvoteDataの値が存在しなければデフォルトのデータを使う。
   const voteData = getVoteData();
   drawChart(voteData);
 }
-
 
 function initVotePage() {
   // vote.htmlで実行する処理を記述
@@ -106,7 +115,7 @@ function initVotePage() {
 
 // データをリセットする関数
 function resetVoteData() {
-  localStorage.removeItem('voteData');
+  document.cookie = 'voteData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   getVoteData();
   location.reload();
 }
