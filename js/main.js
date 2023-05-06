@@ -103,6 +103,9 @@ window.addEventListener('DOMContentLoaded', () => {
   } else {
     initIndexPage();
   }
+  // データをリセットするボタン(ResetButton)を押したときにresetVoteData関数を実行する
+  const resetButton = document.getElementById('reset-button');
+  resetButton.addEventListener('click', resetVoteData);
 });
 
 // データをリセットする関数
@@ -113,5 +116,5 @@ function resetVoteData() {
 }
 
 // データをリセットするボタン(ResetButton)を押したときにresetVoteData関数を実行する
-const resetButton = document.getElementById('reset-button');
-resetButton.addEventListener('click', resetVoteData);
+// const resetButton = document.getElementById('reset-button');
+// resetButton.addEventListener('click', resetVoteData);
