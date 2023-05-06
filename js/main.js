@@ -28,6 +28,7 @@ function drawChart(voteData) {
     data: data,
     options: {
       scales: {
+        // 縦軸の設定で、最小値を0にし、刻み幅を1にする。
         yAxes: [{
           ticks: {
             beginAtZero: true,
@@ -39,9 +40,10 @@ function drawChart(voteData) {
   });
 }
 
-// 投票データをCookieから取得する関数。もしvoteDataがanyならばデフォルトのデータを使い、そのデータをCookieに保存する。
+
+// 投票データをlocalStorageから取得する関数。もしvoteDataがanyならばデフォルトのデータを使い、そのデータをlocalStorageに保存する。
 function getVoteData() {
-  let voteData = getCookie('voteData');
+  let voteData = localStorage.getItem('voteData');
   if (voteData) {
     voteData = JSON.parse(voteData);
     saveVoteData(voteData);
@@ -55,48 +57,28 @@ function getVoteData() {
   return voteData;
 }
 
-// 投票データをCookieに保存する関数。有効期限は7日間。
+
+// 投票データをlocalStorageに保存する関数
 function saveVoteData(voteData) {
-  const jsonStr = JSON.stringify(voteData);
-  setCookie('voteData', jsonStr, 7);
+  localStorage.setItem('voteData', JSON.stringify(voteData));
 }
 
-// Cookieから値を取得する関数。引数にはCookieの名前を指定する。
-function getCookie(name) {
-  const cookies = document.cookie.split(';');
-  for (let i = 0; i < cookies.length; i++) {
-    const c = cookies[i].trim().split('=');
-    if (c[0] === name) {
-      return c[1];
-    }
-  }
-  return '';
-}
-
-// Cookieを設定する関数。第一引数にはCookieの名前、第二引数にはCookieの値、第三引数には有効期限を日数で指定する。
-function setCookie(name, value, maxAge) {
-  const c = `${name}=${value};`;
-  if (maxAge) {
-    c += `max-age=${maxAge * 60 * 60 * 24};`;
-  }
-  document.cookie = c;
-}
-
-// 投票を行う関数
-function castVote(store) {
+// 投票を行う関数。投票データを取得し、storeParamに対応するデータを+1する。その後、投票データをlocalStorageに保存する。
+function castVote(storeParam) {
   const voteData = getVoteData();
-  const storeIndex = voteData.labels.indexOf(store);
-  voteData.data[storeIndex]++;
+  const storeIndex = voteData.labels.indexOf(storeParam);
+  voteData.data[storeIndex] += 1;
   saveVoteData(voteData);
 }
 
 // ページ別の処理
 function initIndexPage() {
   // index.htmlで実行する処理を記述
-  // 投票ボタンを押したときに投票を行う関数を実行する。
+  // 投票データを取得してグラフを描画する。もしvoteDataの値が存在しなければデフォルトのデータを使う。
   const voteData = getVoteData();
   drawChart(voteData);
 }
+
 
 function initVotePage() {
   // vote.htmlで実行する処理を記述
@@ -122,10 +104,11 @@ function initVotePage() {
   });
 }
 
-// データをリセットする関数。投票データをCookieから削除し、ページをリロードする。
+// データをリセットする関数
 function resetVoteData() {
-  document.cookie = 'voteData=; max-age=0';
-  window.location.reload();
+  localStorage.removeItem('voteData');
+  getVoteData();
+  location.reload();
 }
 
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してもしindexを含んでいればinitIndexPage関数を実行する。そうでなければ次の処理を実行する。
