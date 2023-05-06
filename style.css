@@ -27,15 +27,6 @@ section {
   text-align: center;
 }
 
-button {
-  padding: 0.5em 1em;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
-  margin: 0.5em;
-}
-
 footer {
   background-color: #4CAF50;
   color: white;
