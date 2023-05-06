@@ -102,6 +102,7 @@ function resetVoteData() {
 
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してもしindexを含んでいればinitIndexPage関数を実行する。そうでなければ次の処理を実行する。
 window.addEventListener('DOMContentLoaded', () => {
+  getVoteData();
   const url = new URL(window.location.href);
   const urlString = url.toString();
   const isPathIncludesIndex = urlString.includes('index');
