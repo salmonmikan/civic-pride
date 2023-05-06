@@ -93,7 +93,12 @@ function initVotePage() {
   }
 }
 
-
+// データをリセットする関数
+function resetVoteData() {
+  localStorage.removeItem('voteData');
+  getVoteData();
+  location.reload();
+}
 
 // ページ読み込み完了後にメイン処理を実行。現在のURLを取得し、data-pageを利用してindex.htmlとvote.htmlで実行する処理を分ける
 window.addEventListener('DOMContentLoaded', () => {
@@ -103,18 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
   } else {
     initIndexPage();
   }
-  // データをリセットするボタン(ResetButton)を押したときにresetVoteData関数を実行する
-  const resetButton = document.getElementById('reset-button');
+  // データをリセットするボタン(ResetVote)を押したときにresetVoteData関数を実行する
+  const resetButton = document.getElementById('ResetVote');
   resetButton.addEventListener('click', resetVoteData);
 });
-
-// データをリセットする関数
-function resetVoteData() {
-  localStorage.removeItem('voteData');
-  location.reload();
-  getVoteData();
-}
-
-// データをリセットするボタン(ResetButton)を押したときにresetVoteData関数を実行する
-// const resetButton = document.getElementById('reset-button');
-// resetButton.addEventListener('click', resetVoteData);
