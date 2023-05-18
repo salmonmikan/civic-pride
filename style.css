@@ -27,6 +27,13 @@ section {
   text-align: center;
 }
 
+.a4-image {
+  width: 100%;
+  max-width: 595px;
+  height: auto;
+  margin: 20px 0;
+}
+
 /* ボタンに装飾をする。中央に揃えてモダンな見た目にする */
 button {
   background-color: #4CAF50;
